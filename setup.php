@@ -1,8 +1,8 @@
 <?php
 $host = "localhost";
-$user = "root";
-$pass = "";
-$dbname = "crud_app";
+$user = "crudBD";
+$pass = "crudBD28!";
+$dbname = "php_crud";
 
 // Step 1: Connect to MySQL server
 $conn = mysqli_connect($host, $user, $pass);
