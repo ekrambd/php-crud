@@ -1,4 +1,5 @@
 <?php
+//ec2 database
 $host = "localhost";
 $user = "crudBD";
 $pass = "crudBD28!";
