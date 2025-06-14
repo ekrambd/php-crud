@@ -1,56 +1,37 @@
 <?php
-//ec2 database
-$host = "localhost";
-$user = "crudBD";
-$pass = "crudBD28!";
-$dbname = "php_crud";
+require_once 'config.php';
 
-// Step 1: Connect to MySQL server
-$conn = mysqli_connect($host, $user, $pass);
-if (!$conn) {
-    die("Connection failed: " . mysqli_connect_error());
+$conn = new mysqli(DB_HOST, DB_USER, DB_PASS);
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
 }
 
-// Step 2: Create Database
-$sql = "CREATE DATABASE IF NOT EXISTS $dbname";
-if (mysqli_query($conn, $sql)) {
-        $tables = [
+// Create DB
+$conn->query("CREATE DATABASE IF NOT EXISTS " . DB_NAME);
+$conn->select_db(DB_NAME);
 
-        "users" => "CREATE TABLE IF NOT EXISTS users (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            name VARCHAR(100) NOT NULL,
-            email VARCHAR(100) NOT NULL,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )",
-        
-        "subjects" => "CREATE TABLE IF NOT EXISTS users (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            subject_name VARCHAR(100) NOT NULL,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )",
+// Create Tables
+$tables = [
+    "users" => "CREATE TABLE IF NOT EXISTS users (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(100),
+        email VARCHAR(100),
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )",
 
-    ];
+    "subjects" => "CREATE TABLE IF NOT EXISTS subjects (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        subject_name VARCHAR(100),
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )"
+];
 
-    foreach ($tables as $name => $query) {
-    if (mysqli_query($conn, $query)) {
-        echo "Table '$name' created successfully.<br>";
+foreach ($tables as $name => $sql) {
+    if ($conn->query($sql)) {
+        echo "Table '$name' created.<br>";
     } else {
-        echo "Error creating '$name': " . mysqli_error($conn) . "<br>";
+        echo "Error creating '$name': " . $conn->error . "<br>";
     }
 }
-} else {
-    die("Error creating database: " . mysqli_error($conn));
-}
 
-// Step 3: Select the database
-mysqli_select_db($conn, $dbname);
-
-// Step 4: Create Tables
-
-
-
-
-
-// Step 5: Close connection
-mysqli_close($conn);
-?>
+$conn->close();
