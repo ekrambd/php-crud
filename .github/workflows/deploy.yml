@@ -32,6 +32,6 @@ jobs:
 
             git pull origin master
 
-            http://18.142.48.123/setup.php
+            curl http://18.142.48.123/setup.php
 
           EOF
